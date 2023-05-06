@@ -123,6 +123,7 @@ def preprocess_features_hosp(cohort_output, diag_flag,proc_flag,med_flag,lab_fla
             print("[SUCCESSFULLY SAVED LABS DATA]")
         
 def generate_summary_hosp(diag_flag,proc_flag,med_flag,lab_flag):
+    threshold = 0.1
     print("[GENERATING FEATURE SUMMARY]")
     if diag_flag:
         diag = pd.read_csv("./data/features/preproc_diag.csv.gz", compression='gzip',header=0)
@@ -131,7 +132,13 @@ def generate_summary_hosp(diag_flag,proc_flag,med_flag,lab_flag):
         total=diag.groupby('new_icd_code').size().reset_index(name="total_count")
         summary=pd.merge(freq,total,on='new_icd_code',how='right')
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/diag_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >= threshold]
         summary['new_icd_code'].to_csv('./data/summary/diag_features.csv',index=False)
 
 
@@ -146,7 +153,13 @@ def generate_summary_hosp(diag_flag,proc_flag,med_flag,lab_flag):
         summary=pd.merge(freq,summary,on='drug_name',how='right')
         summary['missing%']=100*(summary['missing_count']/summary['total_count'])
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/med_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >= threshold]
         summary['drug_name'].to_csv('./data/summary/med_features.csv',index=False)
 
     
@@ -158,7 +171,13 @@ def generate_summary_hosp(diag_flag,proc_flag,med_flag,lab_flag):
         total=proc.groupby('icd_code').size().reset_index(name="total_count")
         summary=pd.merge(freq,total,on='icd_code',how='right')
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/proc_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >= threshold]
         summary['icd_code'].to_csv('./data/summary/proc_features.csv',index=False)
 
         
@@ -180,7 +199,13 @@ def generate_summary_hosp(diag_flag,proc_flag,med_flag,lab_flag):
         summary=pd.merge(freq,summary,on='itemid',how='right')
         summary['missing%']=100*(summary['missing_count']/summary['total_count'])
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/labs_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >= threshold]
         summary['itemid'].to_csv('./data/summary/labs_features.csv',index=False)
 
     print("[SUCCESSFULLY SAVED FEATURE SUMMARY]")

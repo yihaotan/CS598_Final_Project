@@ -96,6 +96,7 @@ def preprocess_features_icu(cohort_output, diag_flag, group_diag,chart_flag,clea
         
         
 def generate_summary_icu(diag_flag,proc_flag,med_flag,out_flag,chart_flag):
+    threshold = 0.1
     print("[GENERATING FEATURE SUMMARY]")
     if diag_flag:
         diag = pd.read_csv("./data/features/preproc_diag_icu.csv.gz", compression='gzip',header=0)
@@ -104,7 +105,13 @@ def generate_summary_icu(diag_flag,proc_flag,med_flag,out_flag,chart_flag):
         total=diag.groupby('new_icd_code').size().reset_index(name="total_count")
         summary=pd.merge(freq,total,on='new_icd_code',how='right')
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/diag_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >=  threshold]
         summary['new_icd_code'].to_csv('./data/summary/diag_features.csv',index=False)
 
 
@@ -119,7 +126,13 @@ def generate_summary_icu(diag_flag,proc_flag,med_flag,out_flag,chart_flag):
         summary=pd.merge(freq,summary,on='itemid',how='right')
         #summary['missing%']=100*(summary['missing_count']/summary['total_count'])
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/med_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >= threshold]
         summary['itemid'].to_csv('./data/summary/med_features.csv',index=False)
 
     
@@ -131,7 +144,13 @@ def generate_summary_icu(diag_flag,proc_flag,med_flag,out_flag,chart_flag):
         total=proc.groupby('itemid').size().reset_index(name="total_count")
         summary=pd.merge(freq,total,on='itemid',how='right')
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/proc_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >= threshold]
         summary['itemid'].to_csv('./data/summary/proc_features.csv',index=False)
 
         
@@ -142,7 +161,13 @@ def generate_summary_icu(diag_flag,proc_flag,med_flag,out_flag,chart_flag):
         total=out.groupby('itemid').size().reset_index(name="total_count")
         summary=pd.merge(freq,total,on='itemid',how='right')
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/out_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >= threshold]
         summary['itemid'].to_csv('./data/summary/out_features.csv',index=False)
         
     if chart_flag:
@@ -161,7 +186,13 @@ def generate_summary_icu(diag_flag,proc_flag,med_flag,out_flag,chart_flag):
 #         final.groupby('itemid')['total_count'].sum().reset_index()
 #         final.groupby('itemid')['missing%'].mean().reset_index()
         summary=summary.fillna(0)
+        # start
+        summary['distribution'] = summary['total_count'] / summary['total_count'].sum() * 100.0
+        summary['percentile'] = summary['distribution'].rank(pct=True)
+        # end
         summary.to_csv('./data/summary/chart_summary.csv',index=False)
+        # remove pct < threshold
+        summary = summary.loc[summary['percentile'] >= threshold]
         summary['itemid'].to_csv('./data/summary/chart_features.csv',index=False)
 
     print("[SUCCESSFULLY SAVED FEATURE SUMMARY]")
