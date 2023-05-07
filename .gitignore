@@ -3,3 +3,9 @@ scrap
 *.gzip
 *.csv.gz
 *summary*.txt
+data/cohort/
+data/dict/
+data/features/
+data/outpt/
+data/dict/
+data/csv/
