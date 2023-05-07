@@ -1,96 +1,64 @@
-# MIMIC-IV
-**MIMIC-IV data pipeline** is an end-to-end pipeline that offers a configurable framework to prepare MIMIC-IV data for the downstream tasks. 
-The pipeline cleans the raw data by removing outliers and allowing users to impute missing entries. 
-It also provides options for the clinical grouping of medical features using standard coding systems for dimensionality reduction.  
-All of these options are customizable for the users, allowing them to generate a personalized  patient cohort. 
-The customization steps can be recorded for the reproducibility of the overall framework. 
-The pipeline produces a smooth time-series dataset by binning the sequential data into equal-length time intervals and allowing for filtering of the time-series length according to the user's preferences.
-Besides the data processing modules, our pipeline also includes two additional modules for modeling and evaluation. 
-For modeling, the pipeline includes several commonly used sequential models for performing prediction tasks. 
-The evaluation module offers a series of standard methods for evaluating the performance of the created models. 
-This module also includes options for reporting individual and group fairness measures.
+# Reproducibility README for "An Extensive Data Processing Pipeline for MIMIC-IV"
 
-##### Citing MIMIC-IV Data Pipeline:
-MIMIC-IV Data Pipeline is available on [ML4H](https://proceedings.mlr.press/v193/gupta22a/gupta22a.pdf).
-If you use MIMIC-IV Data Pipeline in a scientific publication, we would appreciate citations to the following paper.
+## Citation
+Johnson AE, Pollard TJ, Shen L, Lehman LW, Feng M, Ghassemi M, Moody B, Szolovits P, Celi LA, and Mark RG. MIMIC-IV (version 0.4), a large, publicly available database for research in critical care. Nature Scientific Data, 2021.
 
+## Link to the original paper's repo
+https://github.com/MIT-LCP/mimic-iv
+
+## Dependencies
+- Python (v3.6 or higher)
+- Python packages listed in requirements.txt
+- IDE such as VSCode
+
+## Environment setup
+1. Clone this repo.
 ```
-@InProceedings{gupta2022extensive,
-  title = 	 {{An Extensive Data Processing Pipeline for MIMIC-IV}},
-  author =       {Gupta, Mehak and Gallamoza, Brennan and Cutrona, Nicolas and Dhakal, Pranjal and Poulain, Raphael and Beheshti, Rahmatollah},
-  booktitle = 	 {Proceedings of the 2nd Machine Learning for Health symposium},
-  pages = 	 {311--325},
-  year = 	 {2022},
-  volume = 	 {193},
-  series = 	 {Proceedings of Machine Learning Research},
-  month = 	 {28 Nov},
-  publisher =    {PMLR},
-  pdf = 	 {https://proceedings.mlr.press/v193/gupta22a/gupta22a.pdf},
-  url = 	 {https://proceedings.mlr.press/v193/gupta22a.html}
-}
+git clone https://github.com/yihaotan/CS598_Final_Project.git
 ```
+2. Create and activate a virtual Python environment.
+```
+python -m venv venv 
+source venv/bin/activate
+```
+3. Install the Python packages in requirements.txt
+```
+pip3 install -r requirements.txt
+```
+4. Navigate to the `mainPipeline.ipynb` Jupyter notebook
 
-## Table of Contents:
-- [Steps to download MIMIC-IV dataset for the pipeline](#Steps-to-download-MIMIC-IV-dataset-for-the-pipeline)
-- [Repository Structure](#Repository-Structure)
-- [How to use the pipeline?](#How-to-use-the-pipeline)
+5. Run the Jupyter notebook
 
-### Steps to download MIMIC-IV dataset for the pipeline
+Since the mimiv-iv dataset is already present in /mimiciv directory, run the Jupyer notebook with the following parameters. The numbers below represent the steps in the Jupyter notebook.
+1. Data Extraction: Version 1, Mortality, ICU, Heart Failure
+2. Features selection: Diagnosis and Chart Events (Labs and Vitals)
+3. Clinical Grouping: Convert ICD-9 to ICD-10 and group ICD-10 codes
+5. Feature selection: Yes, Yes
+6. Cleaning of features: Remove outliers (Default: 98)
+7. Time-Series Representation: First 72 hours, 1 hour, No imputation, 2 hours
+8. Machine Learning Models: Logistic Regression, Concactenate, No CV, False
 
-Go to https://physionet.org/content/mimiciv/1.0/
 
-Follow instructions to get access to MIMIC-IV dataset.
+## Data download instruction
+1. Register for access to the MIMIC-IV database at https://mimic-iv.mit.edu/access/.
 
-Download the files using your terminal: wget -r -N -c -np --user mehakg --ask-password https://physionet.org/files/mimiciv/1.0/
+2. Follow the instructions provided to download the necessary files for the version of MIMIC-IV you plan to use.
 
-### Repository Structure
+3. Extract the downloaded files to a folder on your local machine.
 
-- **mainPipeline.ipynb**
-	is the main file to interact with the pipeline. It provides step-step by options to extract and pre-process cohorts.
-- **./data**
-	consists of all data files stored during pre-processing
-	- **./cohort**
-		consists of files saved during cohort extraction
-	- **./features**
-		consist of files containing features data for all selected features.
-	- **./summary**
-		consists of summary files for all features.
-	 	It also consists of file with list of variables in all features and can be used for feature selection.
-	- **./dict**
-		consists of dictionary structured files for all features obtained after time-series representation
-	- **./output**
-		consists output files saved after training and testing of model. These files are used during evaluation.
-- **./mimic-iv-1.0**
-	consist of files downloaded from MIMIC-IV website.
-- **./saved_models**
-	consists of models saved during training.
-- **./preprocessing**
-	- **./day_intervals_preproc**
-		- **day_intervals_cohort.py** file is used to extract samples, labels and demographic data for cohorts.
-		- **disease_cohort.py** is used to filter samples based on diagnoses codes at time of admission
-	- **./hosp_module_preproc**
-		- **feature_selection_hosp.py** is used to extract, clean and summarize selected features for non-ICU data.
-		- **feature_selection_icu.py** is used to extract, clean and summarize selected features for ICU data.
-- **./model**
-	- **train.py**
-		consists of code to create batches of data according to batch_size and create, train and test different models.
-	- **Mimic_model.py**
-		consist of different model architectures.
-	- **evaluation.py**
-		consists of class to perform evaluation of results obtained from models.
-		This class can be instantiated separated for use as standalone module.
-	- **fairness.py**
-		consists of code to perform fairness evaluation.
-		It can also be used as standalone module.
-	- **parameters.py**
-		consists of list of hyperparameters to be defined for model training.
-	- **callibrate_output**
-		consists of code to calibrate model output.
-		It can also be used as standalone module.
 
-### How to use the pipeline?
-- After downloading the repo, open **mainPipeline.ipynb**.
-- **mainPipeline.ipynb**, contains sequential code blocks to extract, preprocess, model and train MIMIC-IV EHR data.
-- Follow each code bloack and read intructions given just before each code block to run code block.
-- Follow the exact file paths and filenames given in instructions for each code block to run the pipeline.
-- For evaluation module, clear instructions are provided on how to use it as a standalone module.
+## Table of results
+
+| Metric             | Baseline        | Model 1        |
+| ------------------ |---------------- | -------------- |
+| BCE Loss           |    9.46         |   8.22         |
+| AU-ROC             |    0.60         |   0.58         |
+| AU-PRC             |    0.20         |   0.23         |
+| AU-PRC Baseline    |    0.13         |   0.14         | 
+| Accuracy           |    0.80         |   0.81         |
+| Precision          |    0.23         |   0.28         |
+| Recall             |    0.25         |   0.23         |
+| Specificity        |    0.88         |   0.90         | 
+| NPV                |    0.89         |   0.88         |
+| ECE                |    0.16         |   0.15         |
+| MCE                |    0.75         |   0.66         |
