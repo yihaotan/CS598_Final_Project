@@ -1,22 +1,7 @@
 # Reproducibility README for "An Extensive Data Processing Pipeline for MIMIC-IV"
 
 ## Citation
-@InProceedings{pmlr-v193-gupta22a,
-  title = 	 {An Extensive Data Processing Pipeline for MIMIC-IV},
-  author =       {Gupta, Mehak and Gallamoza, Brennan and Cutrona, Nicolas and Dhakal, Pranjal and Poulain, Raphael and Beheshti, Rahmatollah},
-  booktitle = 	 {Proceedings of the 2nd Machine Learning for Health symposium},
-  pages = 	 {311--325},
-  year = 	 {2022},
-  editor = 	 {Parziale, Antonio and Agrawal, Monica and Joshi, Shalmali and Chen, Irene Y. and Tang, Shengpu and Oala, Luis and Subbaswamy, Adarsh},
-  volume = 	 {193},
-  series = 	 {Proceedings of Machine Learning Research},
-  month = 	 {28 Nov},
-  publisher =    {PMLR},
-  pdf = 	 {https://proceedings.mlr.press/v193/gupta22a/gupta22a.pdf},
-  url = 	 {https://proceedings.mlr.press/v193/gupta22a.html},
-  abstract = 	 {An increasing amount of research is being devoted to applying machine learning methods to electronic health record (EHR) data for various clinical purposes. This growing area of research has exposed the challenges of the accessibility of EHRs. MIMIC is a popular, public, and free EHR dataset in a raw format that has been used in numerous studies. The absence of standardized preprocessing steps can be, however, a significant barrier to the wider adoption of this rare resource. Additionally, this absence can reduce the reproducibility of the developed tools and limit the ability to compare the results among similar studies. In this work, we provide a greatly customizable pipeline to extract, clean, and preprocess the data available in the fourth version of the MIMIC dataset (MIMIC-IV). The pipeline also presents an end-to-end wizard-like package supporting predictive model creations and evaluations. The pipeline covers a range of clinical prediction tasks which can be broadly classified into four categories - readmission, length of stay, mortality, and phenotype prediction. The tool is publicly available at https://github.com/healthylaife/MIMIC-IV-Data-Pipeline.}
-}
-
+Gupta, M., Gallamoza, B., Cutrona, N., Dhakal, P., Poulain, R. &amp; Beheshti, R.. (2022). An Extensive Data Processing Pipeline for MIMIC-IV. <i>Proceedings of the 2nd Machine Learning for Health symposium</i>, in <i>Proceedings of Machine Learning Research</i> 193:311-325 Available from https://proceedings.mlr.press/v193/gupta22a.html.
 
 ## Link to the original paper's repo
 https://github.com/healthylaife/MIMIC-IV-Data-Pipeline
