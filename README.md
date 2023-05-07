@@ -4,7 +4,7 @@
 Johnson AE, Pollard TJ, Shen L, Lehman LW, Feng M, Ghassemi M, Moody B, Szolovits P, Celi LA, and Mark RG. MIMIC-IV (version 0.4), a large, publicly available database for research in critical care. Nature Scientific Data, 2021.
 
 ## Link to the original paper's repo
-https://github.com/MIT-LCP/mimic-iv
+https://github.com/healthylaife/MIMIC-IV-Data-Pipeline
 
 ## Dependencies
 - Python (v3.6 or higher)
